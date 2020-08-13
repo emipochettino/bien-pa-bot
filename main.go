@@ -34,9 +34,11 @@ func main() {
 			log.Print("nil message")
 			continue
 		}
-		if update.Message.Command() != "bien_pa" || !strings.Contains(update.Message.Text, "vo pa") {
+		if !strings.Contains(update.Message.Text, "vo pa") {
 			continue
 		}
+
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, getAnswer())
 		msg.ReplyToMessageID = update.Message.MessageID
