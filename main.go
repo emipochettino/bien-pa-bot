@@ -31,7 +31,6 @@ func main() {
 
 	for update := range updates {
 		if update.Message == nil {
-			log.Print("nil message")
 			continue
 		}
 		if !strings.Contains(update.Message.Text, "vo pa") {
