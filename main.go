@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	infrastructure "github.com/emipochettino/bien-pa-bot/internal/infrastructure/adapters/providers"
+	application "github.com/emipochettino/bien-pa-bot/internal/infrastructure/services"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
-	"math/rand"
 	"os"
 	"strings"
 )
@@ -27,30 +28,28 @@ func main() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
+	messageService := application.NewMessageService(
+		infrastructure.NewGreetingMessageAnswerProvider(),
+		infrastructure.NewIncomingMessageAnswerProvider(),
+	)
+
 	updates, err := bot.GetUpdatesChan(u)
 
 	for update := range updates {
-		if update.Message == nil {
-			continue
-		}
-		if !strings.Contains(update.Message.Text, "vo pa") {
-			continue
-		}
+		innerUpdate := update
+		go func(){
+			if innerUpdate.Message == nil {
+				return
+			}
+			answer, err := messageService.AnswerAMessage(innerUpdate.Message.Text)
+			if err != nil {
+				return
+			}
+			log.Printf("[%s] %s", innerUpdate.Message.From.UserName, innerUpdate.Message.Text)
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, getAnswer())
-		msg.ReplyToMessageID = update.Message.MessageID
-		bot.Send(msg)
+			msg := tgbotapi.NewMessage(innerUpdate.Message.Chat.ID, answer.GetText())
+			msg.ReplyToMessageID = innerUpdate.Message.MessageID
+			bot.Send(msg)
+		}()
 	}
-}
-
-func getAnswer() string {
-	answers := []string{
-		"bien pa vo pa?",
-		"bieeeeeeeen pa vo pa?",
-		"feró pa vo pa?",
-		"ahí andamo pa vo pa?",
-	}
-	return answers[rand.Intn(len(answers)-1)]
 }
