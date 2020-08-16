@@ -28,16 +28,16 @@ func main() {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	messageService := application.NewMessageService(
-		infrastructure.NewGreetingMessageAnswerProvider(),
-		infrastructure.NewIncomingMessageAnswerProvider(),
-	)
+	greetingMessageProcessor := application.NewGreetingMessageProcessor(infrastructure.NewGreetingMessageAnswerProvider())
+	incomingMessageProcessor := application.NewIncomingMessageProcessor(infrastructure.NewIncomingMessageAnswerProvider())
+	messageServiceManager := application.NewMessageProcessorManager(greetingMessageProcessor, incomingMessageProcessor)
+	messageService := application.NewMessageService(messageServiceManager)
 
 	updates, err := bot.GetUpdatesChan(u)
 
 	for update := range updates {
 		innerUpdate := update
-		go func(){
+		go func() {
 			if innerUpdate.Message == nil {
 				return
 			}

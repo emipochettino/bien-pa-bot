@@ -5,6 +5,11 @@ import (
 	"strings"
 )
 
+const (
+	IncomingMessageType = "IncomingMessageType"
+	GreetingMessageType = "GreetingMessageType"
+)
+
 type InMessage interface {
 	GetType() string
 }
@@ -41,6 +46,7 @@ func NewInMessage(text string) (InMessage, error) {
 	greetingMessageTexts := []string{
 		"ola pa",
 		"onda pa",
+		"bien pa",
 	}
 	for _, greetingMessageText := range greetingMessageTexts {
 		if strings.Contains(text, greetingMessageText) {
