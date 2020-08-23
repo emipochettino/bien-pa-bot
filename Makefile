@@ -9,7 +9,7 @@ docker run -d --name bien-pa-bot --env-file config.env bien-pa-bot;\
 
 .PHONY: start
 start:
-	@docker run -d --env-file config.env bien-pa-bot
+	@docker run -d --name bien-pa-bot --env-file config.env bien-pa-bot
 
 .PHONY: stop
 stop:
