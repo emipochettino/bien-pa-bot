@@ -1,11 +1,13 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	infrastructure "github.com/emipochettino/bien-pa-bot/internal/infrastructure/adapters/providers"
 	application "github.com/emipochettino/bien-pa-bot/internal/infrastructure/services"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -16,7 +18,12 @@ func main() {
 		panic(fmt.Errorf("TELEGRAM_TOKEN not set"))
 	}
 
-	bot, err := tgbotapi.NewBotAPI(token)
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+
+	bot, err := tgbotapi.NewBotAPIWithClient(token, client)
 	if err != nil {
 		panic(err)
 	}
