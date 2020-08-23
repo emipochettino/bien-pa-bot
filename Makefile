@@ -4,7 +4,7 @@ deploy:
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .;\
 docker build -t bien-pa-bot .;\
 rm main;\
-docker run --env-file config.env bien-pa-bot &>>logs.txt;\
+docker run -d --name bien-pa-bot --env-file config.env bien-pa-bot;\
 
 .PHONY: start
 start:
