@@ -42,3 +42,19 @@ func (i IncomingMessageProcessor) Process(message domain.InMessage) (domain.Answ
 func NewIncomingMessageProcessor(answerProvider infrastructure.AnswerProvider) MessageProcessor {
 	return &IncomingMessageProcessor{answerProvider: answerProvider}
 }
+
+type VaccinationMessageProcessor struct {
+	answerProvider infrastructure.AnswerProvider
+}
+
+func (m *VaccinationMessageProcessor) shouldProcess(messageType string) bool {
+	return strings.EqualFold(domain.VaccinationMessageType, messageType)
+}
+
+func (m *VaccinationMessageProcessor) Process(message domain.InMessage) (domain.Answer, error) {
+	return domain.NewAnswer(m.answerProvider.GetAnswer())
+}
+
+func NewVaccinationMessageProcessor(answerProvider infrastructure.AnswerProvider) MessageProcessor {
+	return &VaccinationMessageProcessor{answerProvider: answerProvider}
+}

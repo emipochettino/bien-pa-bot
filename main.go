@@ -37,14 +37,14 @@ func main() {
 
 	greetingMessageProcessor := application.NewGreetingMessageProcessor(infrastructure.NewGreetingMessageAnswerProvider())
 	incomingMessageProcessor := application.NewIncomingMessageProcessor(infrastructure.NewIncomingMessageAnswerProvider())
-	messageServiceManager := application.NewMessageProcessorManager(greetingMessageProcessor, incomingMessageProcessor)
+	vaccinationMessageProcessor := application.NewVaccinationMessageProcessor(infrastructure.NewVaccinationMessageAnswerProvider())
+	messageServiceManager := application.NewMessageProcessorManager(greetingMessageProcessor, incomingMessageProcessor, vaccinationMessageProcessor)
 	messageService := application.NewMessageService(messageServiceManager)
 
 	updates, err := bot.GetUpdatesChan(u)
 
 	for update := range updates {
-		innerUpdate := update
-		go func() {
+		go func(innerUpdate tgbotapi.Update) {
 			if innerUpdate.Message == nil {
 				return
 			}
@@ -57,6 +57,6 @@ func main() {
 			msg := tgbotapi.NewMessage(innerUpdate.Message.Chat.ID, answer.GetText())
 			msg.ReplyToMessageID = innerUpdate.Message.MessageID
 			bot.Send(msg)
-		}()
+		}(update)
 	}
 }

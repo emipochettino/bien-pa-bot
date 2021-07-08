@@ -32,3 +32,21 @@ func NewGreetingMessageAnswerProvider() AnswerProvider {
 		},
 	}
 }
+
+func NewVaccinationMessageAnswerProvider() AnswerProvider {
+	return &answerProvider{
+		answers: []string{
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"vacunate bobo",
+			"no estas informado, mejor vacunate",
+			"no pensás en la inmunidad de rebaño, dale vacunate y cerrá el culo",
+		},
+	}
+}

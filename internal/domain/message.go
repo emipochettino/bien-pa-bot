@@ -8,6 +8,7 @@ import (
 const (
 	IncomingMessageType = "IncomingMessageType"
 	GreetingMessageType = "GreetingMessageType"
+	VaccinationMessageType = "VaccinationMessageType"
 )
 
 type InMessage interface {
@@ -28,6 +29,14 @@ type greetingMessage struct {
 
 func (i *greetingMessage) GetType() string {
 	return GreetingMessageType
+}
+
+type vaccinationMessage struct {
+	text string
+}
+
+func (i *vaccinationMessage) GetType() string {
+	return VaccinationMessageType
 }
 
 func NewInMessage(text string) (InMessage, error) {
@@ -51,6 +60,28 @@ func NewInMessage(text string) (InMessage, error) {
 	for _, greetingMessageText := range greetingMessageTexts {
 		if strings.Contains(text, greetingMessageText) {
 			return &greetingMessage{text: text}, nil
+		}
+	}
+	vaccinationMessageTexts := []string{
+		"sputnik",
+		"la rusa",
+		"moderna",
+		"pfizer",
+		"dosis",
+		"la china",
+		"astrazeneca",
+		"vacuna",
+		"fiebre",
+		"virus",
+		"inmunidad",
+		"covid",
+		"corona",
+		"coronavirus",
+	}
+
+	for _, vaccinationMessageText := range vaccinationMessageTexts {
+		if strings.Contains(strings.ToLower(text), vaccinationMessageText) {
+			return &vaccinationMessage{text: text}, nil
 		}
 	}
 
