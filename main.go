@@ -48,7 +48,7 @@ func main() {
 			if innerUpdate.Message == nil {
 				return
 			}
-			answer, err := messageService.AnswerAMessage(innerUpdate.Message.Text)
+			answer, err := messageService.AnswerAMessage(innerUpdate.Message.Text, innerUpdate.Message.From.UserName)
 			if err != nil {
 				return
 			}

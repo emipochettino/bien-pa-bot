@@ -2,12 +2,13 @@ package domain
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
 const (
-	IncomingMessageType = "IncomingMessageType"
-	GreetingMessageType = "GreetingMessageType"
+	IncomingMessageType    = "IncomingMessageType"
+	GreetingMessageType    = "GreetingMessageType"
 	VaccinationMessageType = "VaccinationMessageType"
 )
 
@@ -39,7 +40,7 @@ func (i *vaccinationMessage) GetType() string {
 	return VaccinationMessageType
 }
 
-func NewInMessage(text string) (InMessage, error) {
+func NewInMessage(text string, name string) (InMessage, error) {
 	if len(text) == 0 {
 		return nil, fmt.Errorf("the should not be empty")
 	}
@@ -78,10 +79,14 @@ func NewInMessage(text string) (InMessage, error) {
 		"corona",
 		"coronavirus",
 	}
-
-	for _, vaccinationMessageText := range vaccinationMessageTexts {
-		if strings.Contains(strings.ToLower(text), vaccinationMessageText) {
-			return &vaccinationMessage{text: text}, nil
+	toAnswers := strings.Split(os.Getenv("TO_ANSWER_LIST"), ",")
+	for _, toAnswer := range toAnswers {
+		if toAnswer == name {
+			for _, vaccinationMessageText := range vaccinationMessageTexts {
+				if strings.Contains(strings.ToLower(text), vaccinationMessageText) {
+					return &vaccinationMessage{text: text}, nil
+				}
+			}
 		}
 	}
 

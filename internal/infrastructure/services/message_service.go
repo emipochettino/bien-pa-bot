@@ -9,8 +9,8 @@ type messageService struct {
 }
 
 //AnswerAMessage validate the incoming text and return an answer if all goes well
-func (m messageService) AnswerAMessage(text string) (domain.Answer, error) {
-	inMessage, err := domain.NewInMessage(text)
+func (m messageService) AnswerAMessage(text string, name string) (domain.Answer, error) {
+	inMessage, err := domain.NewInMessage(text, name)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func (m messageService) AnswerAMessage(text string) (domain.Answer, error) {
 }
 
 type MessageService interface {
-	AnswerAMessage(text string) (domain.Answer, error)
+	AnswerAMessage(text string, userName string) (domain.Answer, error)
 }
 
 func NewMessageService(messageProcessorManager MessageProcessorManager) MessageService {

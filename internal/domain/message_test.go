@@ -6,7 +6,7 @@ import (
 )
 
 func TestNewInMessageWithTypeGreeting(t *testing.T) {
-	inMessage, err := NewInMessage("Hola pa")
+	inMessage, err := NewInMessage("Hola pa", "user_test")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, inMessage)
@@ -14,7 +14,7 @@ func TestNewInMessageWithTypeGreeting(t *testing.T) {
 }
 
 func TestNewInMessageWithTypeIncoming(t *testing.T) {
-	inMessage, err := NewInMessage("Bien pa vo pa")
+	inMessage, err := NewInMessage("Bien pa vo pa", "user_test")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, inMessage)
@@ -22,7 +22,7 @@ func TestNewInMessageWithTypeIncoming(t *testing.T) {
 }
 
 func TestNewInMessageReturnErrorForInvalidText(t *testing.T) {
-	inMessage, err := NewInMessage("hola que tal")
+	inMessage, err := NewInMessage("hola que tal", "user_test")
 
 	assert.Nil(t, inMessage)
 	assert.NotNil(t, err)
